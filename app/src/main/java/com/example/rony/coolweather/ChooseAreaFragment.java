@@ -2,6 +2,7 @@ package com.example.rony.coolweather;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -73,7 +74,7 @@ public class ChooseAreaFragment extends Fragment{
         titleText=(TextView)view.findViewById(R.id.title_text);
         backButton=(Button)view.findViewById(R.id.back_button);
         listView=(ListView) view.findViewById(R.id.list_view);
-        adapter=new ArrayAdapter<>(getActivity().getApplicationContext(),android.R.layout.simple_list_item_1,dataList);
+        adapter=new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,dataList);
         listView.setAdapter(adapter);
         return view;
     }
@@ -90,6 +91,12 @@ public class ChooseAreaFragment extends Fragment{
                 }else if (currentLevel==LEVEL_CITY){
                     selectedCity=cityList.get(i);
                     queryCounties();
+                }else if (currentLevel==LEVEL_COUNTY){
+                    String weatherId=countyList.get(i).getWeatherId();
+                    Intent intent=new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -172,7 +179,7 @@ public class ChooseAreaFragment extends Fragment{
                     @Override
                     public void run() {
                         closeProgressDialog();
-                        Toast.makeText(getActivity().getApplicationContext(),"download fail",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"download fail",Toast.LENGTH_SHORT).show();
                     }
                 });
             }
